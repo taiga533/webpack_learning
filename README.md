@@ -57,7 +57,7 @@ webpackを使う場合はこの`webpackで読み込むファイル群を置く�
 
 #### エントリーポイント
 エントリーポイントはwebpackが最初に読み込むファイルを指します。  
-webpackは何も設定しないと`src/index.js`をエントリーポイントとみなします。　　
+webpackは何も設定しないと`src/index.js`をエントリーポイントとみなします。  
 エントリーポイントを読み込んだwebpackは  
 1. エントリーポイントで読み込まれているファイルを読み込む
 1. 更にそこで読み込まれているファイルを読み込む
@@ -104,7 +104,33 @@ document.body.appendChild(component())
 JavaScriptで別ファイルを読み込むためには
 - 読み込まれるファイルに **外部から読み込めるようにする目印** を書く
 - 読み込むファイルに **別ファイルを読み込むための文法** を書く
+
 ということが必要です。
+
+### webpackで生成されたファイル
+webpackで生成された`introduction/dist/main.js`を見てみましょう。  
+改行が無くコードもほぼ読めないことがわかります。  
+これはwebpackがコードをminify(最小化)しているのでこのようなファイルが生成されるのです。  
+コードをminifyすることは下記のメリットがあります。
+- 改行コード・長い変数名などが無くなるためファイルサイズが小さくなる
+- 難読化されているため解読が難しくなる（解読するためのツールはある）
+
+しかしデメリットとして
+- デバッグ時にコードの解析ができない
+
+というものがあります。  
+webpackは実行時にモードを指定することができ、developmentモードでwebpackを実行するとデバッグ可能なファイルが生成されます。
+```
+npx webpack --mode development
+```
+
+このコマンドを実行してから`introduction/dist/index.html`を開き、開発者ツールで`Source -> Page -> webpack://`を見ると一つにまとまる前のファイルを見ることができます。
+
+#### まとめ
+- webpackは実行時もモードを指定できる
+- モード指定しないとコードがminify(最小化)されて出力される
+- minifyされたコードはデバッグできない
+- developmentモードでwebpackを実行するとデバッグできるコードが生成される
 
 ## webpackでSCSSをCSSに変換する
 前回のフロントエンド勉強会で、
@@ -121,7 +147,7 @@ SCSSをwebpackで変換するためには、loadlerが必要なのでインス�
 コマンドプロンプト上で`[クローンしたフォルダ]/scss_transpile`に移動して、下記のコマンドを打ってください。
 ```
 npm init
-npm remove sass-loader \
+npm i -D sass-loader \
     node-sass \
     style-loader \
     css-loader
@@ -157,3 +183,32 @@ document.body.appendChild(component())
 ```
 npx webpack
 ```
+
+#### まとめ
+- webpackで様々なファイルを扱うためにはloaderというものが必要になる
+- loaderを扱うためには設定ファイルが必要になる
+- 読み込むファイルに指定するにはJavaScript内で **別ファイルを読み込むための文法** を使う
+
+## webpack-dev-serverを使う
+webpackの有無に関わらず静的リソースを触っていると、静的リソースに変更を加えてブラウザをリロードするという操作を煩わしく感じるときはありませんか？  
+webpackのプラグインであるwebpack-dev-serverを使うと、静的リソースの更新後に自動でブラウザをリロードしてくれるようになります。  
+早速使ってみましょう。  
+
+### webpack-dev-serverを使ってみる
+コマンドプロンプトで`webpack-dev-server`フォルダに移動して、下記コマンドを打ちましょう。  
+```
+npm i
+npm i -D webpack-dev-server
+npx webpack-dev-server
+```
+その後<http://localhost:8080>にアクセスすると`dist/index.html`が表示されます。  
+
+この状態で、`webpack-dev-server/src/scss/index.scss`を編集してみましょう。  
+ブラウザを見てみると自分でリロードしなくてもindex.scssに加えた変更が適用されているはずです。
+
+## まとめ
+このように
+- 複数のファイルを一つにまとめる
+- SCSSをコンパイルする
+- 手動でリロードせずに静的ファイルの変更を確認できる
+という便利な機能があるwebpackです。
