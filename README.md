@@ -8,6 +8,11 @@ JavaScriptやCSS、画像を一つのJavaScriptにまとめる事ができるア
 - 開発ではSCSSやTypeScript（JavaScriptの亜種）を使えるようになる
 - 複数のファイルでJavaScriptを書きやすくなる
 
+## 今日お話すること
+- webpackの導入方法
+- webpackを使ってSCSSをコンパイルする方法
+- webpack-dev-serverを使った開発方法
+
 ## 導入
 webpackの導入はちょっと難しいですが3STEPで完了します。
 1. Node.jsというアプリが必要になるので入れましょう。[ダウンロードリンク](https://nodejs.org/ja/)（LTS推奨版をダウンロードしてください）
